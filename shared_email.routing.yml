@@ -1,0 +1,7 @@
+shared_email.form:
+  path: '/admin/config/shared_email'
+  defaults:
+    _form: 'Drupal\shared_email\Form\SharedEmailForm'
+    _title: 'Shared E-Mail settings'
+  requirements:
+    _permission: 'administer site configuration'

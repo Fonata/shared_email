@@ -1,0 +1,60 @@
+<?php
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_help().
+ */
+function shared_email_help($route_name) {
+  switch ($route_name) {
+    case 'help.page.shared_email':
+      $output = t('<p>Allow an e-mail address to be used by more than one user account.</p>');
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ * Removes the unique constraint for the email address.
+ */
+function shared_email_entity_base_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type) {
+  // Alter the email text field to allow duplicates.
+  if ($entity_type->id() == 'user' && !empty($fields['mail'])) {
+    $constraints = $fields['mail']->getConstraints();
+    unset($constraints['UserMailUnique']);
+    $fields['mail']->setConstraints($constraints);
+  }
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * FORM_ID = user_profile_form
+ * Add a submit check to see
+ */
+function shared_email_form_user_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $form['actions']['submit']['#submit'][] = '_shared_email_form_submit';
+}
+
+/**
+ * @param $form
+ * @param $form_state
+ *  hook_form_FORM_ID_alter handler
+ * If the user has access to be shown the message
+ * and the message applies, show it
+ */
+function _shared_email_form_submit($form, &$form_state) {
+  //Do they have permission to see the message
+  if ( \Drupal::currentUser()->hasPermission('access shared_email_message')) {
+    $users = \Drupal::entityManager()
+      ->getStorage('user')
+      ->loadByProperties((array('mail' => $form['account']['mail']['#value'])));
+
+    if (isset($users) && count($users) > 1) {
+      $config = \Drupal::configFactory()->get('shared_email.settings');
+      drupal_set_message(t($config->get('sharedemail_msg')));
+    }
+  }
+
+}
+

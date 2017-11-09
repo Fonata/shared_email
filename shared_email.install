@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Installation functions for Shared E-Mail module.
+ * Set the default warning message on install
+ */
+/*
+use Drupal\Core\Site\Settings;
+
+function shared_email_install() {
+    $config = \Drupal::configFactory()->getEditable('shared_email.settings');
+    $config->set('sharedemail_msg', 'WARNING: The e-mail address you are using, has already been registered on this site by another user. You should be aware that personal information such as password resets will be sent to this address. We strongly recommend changing your registered address to a different e-mail address. You can do this at any time from your account page when you login.');
+    $config->save();
+}
+
+*/
