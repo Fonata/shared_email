@@ -1,0 +1,10 @@
+{
+    "name": "fonata/shared_email",
+    "description": "Drupal 8 module to allow user accounts to share an email address.",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "burgdawg"
+        }
+    ]
+}
